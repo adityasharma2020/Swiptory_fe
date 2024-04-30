@@ -16,20 +16,18 @@ export const addStoryApi = async ({ values, token }) => {
 				},
 			}
 		);
-		console.log('response from server:', response);
 
 		return response.data;
 	} catch (error) {
-		console.log('inside catch');
 		throw new Error(error.response?.data?.error?.message || 'something went wrong');
 	}
 };
 
 
-export const getUserStoriesApi = async ({ token }) => {
+export const getUserStoriesApi = async ({ token ,page}) => {
 	try {
 		const response = await axios.get(
-			`${USER_ENDPOINT}/stories`,
+			`${USER_ENDPOINT}/stories?page=${page}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,

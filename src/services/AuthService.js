@@ -8,7 +8,6 @@ export const loginUserApi = async (values) => {
 		const response = await axios.post(`${AUTH_ENDPOINT}/login`, {
 			...values,
 		});
-		console.log('response from server:', response);
 
 		return response.data;
 	} catch (error) {

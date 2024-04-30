@@ -1,53 +1,85 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SingleStory from '../SingleStory/SingleStory';
 import styles from './CategoryStories.module.css';
-import { fetchAllStoriesApi } from '../../../services/StoriesService';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { SET_MAIN_LOADING } from '../../../redux/slice/mainSlice';
+import { fetchCategoryStoriesApi } from '../../../services/StoriesService';
+import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-// import { fetchAllStoriesApi, fetchCategoryStoriesApi } from '../../../services/StoriesService';
+import SkeletonLoader from '../../SkeletonLoader/SkeletonLoader';
 
-const CategoryStories = ({ selectedCategory, newStoryAdded }) => {
-	const [allStories, setAllStories] = useState({});
+
+const CategoryStories = ({ category }) => {
+	const [page, setPage] = useState(1);
+	const [stories, setStories] = useState([]);
 	const { user } = useSelector((state) => state.user);
+	const [remainingCount, setRemainingConut] = useState(null);
 	const { token } = user;
-	const dispatch = useDispatch();
+	const [storiesLoading, setStoriesLoading] = useState(false);
+	const [showMoreClicked,setShowMoreClicked] = useState(false);
+
+	console.log('category stories:', stories);
 
 	useEffect(() => {
-		const fetchAllStories = async () => {
-			dispatch(SET_MAIN_LOADING(true));
-
+		const fetchStories = async () => {
+			const categoryKey = category.key;
 			try {
-				let data = await fetchAllStoriesApi({ selectedCategory, token });
-				setAllStories(data?.data);
+				if(!showMoreClicked){
+					setStoriesLoading(true);
+				}
+
+				const data = await fetchCategoryStoriesApi({ categoryKey, token, page });
+				const newStories = data.data;
+				setStories((prev) => [...prev, ...newStories]);
+				setRemainingConut(data?.remainingCount);
 			} catch (error) {
 				toast.error(error.message);
 			} finally {
-				dispatch(SET_MAIN_LOADING(false));
+				setStoriesLoading(false);
 			}
 		};
-		fetchAllStories(selectedCategory);
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedCategory, newStoryAdded]);
+		fetchStories();
+	}, [category.key, page, showMoreClicked, token]);
+	
+
+	useEffect(() => {
+		setShowMoreClicked(false);
+		setStories([]);
+		setPage(1);
+	}, [category.key]);
 
 	return (
-		<div className=''>
-			{Object.entries(allStories).map(([category, stories]) => (
-				<div className={styles.mainContainer} key={category}>
-					<>
-						<h2 className={styles.h2}>{`Top stories about ${category} `}</h2>
-						<div className={styles.container}>
-							{stories.map((story) => (
-								<SingleStory key={story._id} story={story} />
-							))}
-						</div>
-
-						<button className={styles.showMoreButton}>Show More</button>
-					</>
-				</div>
-			))}
+		<div className={styles.mainContainer}>
+			<h2 className={styles.h2}>
+				Stories of category <span className={styles.categoryName}>{category.name}</span>
+			</h2>
+			{!storiesLoading ? (
+				<>
+					{stories.length > 0 ? (
+						<>
+							<div className={styles.container}>
+								{stories.map((story, index) => (
+									<SingleStory key={index} story={story} />
+								))}
+							</div>
+							{remainingCount > 0 && (
+								<button
+									onClick={() => {
+										setShowMoreClicked(true);
+										setPage((prev) => prev + 1);
+									}}
+									className={styles.showMoreButton}
+								>
+									show more
+								</button>
+							)}
+						</>
+					) : (
+						<div className={styles.noStories}>No Stories Available</div>
+					)}
+				</>
+			) : (
+				<SkeletonLoader />
+			)}
 		</div>
 	);
 };

@@ -7,7 +7,7 @@ import LikeIcon from '../../../svg/LikeIcon';
 import ShareIcon from '../../../svg/ShareIcon';
 import StoryHeader from './StoryHeader';
 import styles from './ViewStoryPopup.module.css';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SET_LOGIN_POPUP, SET_VIEW_STORY_POPUP } from '../../../redux/slice/mainSlice';
 import { SET_ACTIVE_STORY } from '../../../redux/slice/storySlice';
 import toast from 'react-hot-toast';
@@ -15,7 +15,7 @@ import { bookMarkStoryApi, likeStoryApi } from '../../../services/StoriesService
 import { useLocation, useNavigate } from 'react-router-dom';
 const API_ENDPOINT = `${import.meta.env.VITE_REACT_APP_CLIENT_ENDPOINT}`;
 
-const ViewStoryPopup = () => {
+const ViewStoryPopup = ({ isSmallScreen }) => {
 	let duration = 5000;
 	const [loaded, setLoaded] = useState(false);
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -30,28 +30,24 @@ const ViewStoryPopup = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const handleBack = () => {
+	const handleBack = useCallback(() => {
 		if (activeIndex > 0) {
 			setProgress(0);
 			setActiveIndex((activeIndex) => activeIndex - 1);
 		}
-	};
+	}, [activeIndex]);
 
-	console.log('loaded:,', loaded);
-	const handleForward = () => {
-		console.log('clicked');
+	const handleForward = useCallback(() => {
 		if (activeIndex < activeStory?.slides?.length - 1) {
 			setProgress(0);
 			setLoaded(false);
-			console.log('inside if');
 			if (loaded) {
-				console.log('loaded become true');
 				setActiveIndex((activeIndex) => activeIndex + 1);
 			}
 		}
-	};
+	}, [activeIndex, activeStory?.slides?.length, loaded]);
 
-	const handleCloseButton = () => {
+	const handleCloseButton = useCallback(() => {
 		if (location.pathname.startsWith('/view_story')) {
 			dispatch(SET_VIEW_STORY_POPUP(false));
 			dispatch(SET_ACTIVE_STORY({}));
@@ -60,7 +56,7 @@ const ViewStoryPopup = () => {
 			dispatch(SET_VIEW_STORY_POPUP(false));
 			dispatch(SET_ACTIVE_STORY({}));
 		}
-	};
+	},[dispatch, location.pathname, navigate]);
 
 	const handleShareButton = async () => {
 		const textToCopy = `${API_ENDPOINT}/view_story/${activeStory._id}`;
@@ -102,6 +98,25 @@ const ViewStoryPopup = () => {
 		}
 	};
 
+	useEffect(() => {
+		const handleKeyDown = (event) => {
+			if (event.keyCode == 37) {
+				// for left Arrow
+				handleBack();
+			} else if (event.keyCode == 39) {
+				//for right arrow
+				handleForward();
+			} else if (event.keyCode == 27) {
+				// for escape key
+				handleCloseButton();
+			}
+		};
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [handleBack, handleCloseButton, handleForward]);
+
 	return (
 		<div className={`${styles.mainContainer}`}>
 			<div className={styles.outerContainer}>
@@ -134,6 +149,12 @@ const ViewStoryPopup = () => {
 					</div>
 
 					<div className={styles.imageContainer}>
+						<div
+							onClick={() => {
+								isSmallScreen && handleBack();
+							}}
+							className={styles.beforeImage}
+						></div>
 						<img
 							key={activeIndex}
 							className={!loaded ? `${styles.loading}` : ''}
@@ -146,6 +167,12 @@ const ViewStoryPopup = () => {
 							src={activeStory?.slides[activeIndex]?.ImageURL}
 							alt=''
 						/>
+						<div
+							onClick={() => {
+								isSmallScreen && handleForward();
+							}}
+							className={styles.afterImage}
+						></div>
 					</div>
 
 					{/* story info */}

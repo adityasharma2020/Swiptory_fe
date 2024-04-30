@@ -29,7 +29,7 @@ export const userSlice = createSlice({
 		},
 		SET_LOGIN: (state, action) => {
 			const userDetails = action.payload;
-			console.log('data in redux:', userDetails);
+
 			state.isLoggedIn = true;
 			state.user._id = userDetails?.user?._id;
 			state.user.name = userDetails?.user?.name;
@@ -55,10 +55,30 @@ export const userSlice = createSlice({
 		SET_USER_LOADING: (state, action) => {
 			state.loading = action.payload;
 		},
+		SET_SESSION: (state, action) => {
+			if (action.payload) {
+				(state.isLoggedIn = false),
+					(state.error = null),
+					(state.loading = false),
+					(state.user = {
+						_id: '',
+						name: '',
+						email: '',
+						picture: '',
+						token: '',
+					});
+			}
+		},
 	},
 });
 
-export const { SET_REGISTER, SET_LOGIN, SET_LOGOUT, SET_USER_LOADING, SET_ERROR_MESSAGE } =
-	userSlice.actions;
+export const {
+	SET_REGISTER,
+	SET_LOGIN,
+	SET_LOGOUT,
+	SET_SESSION,
+	SET_USER_LOADING,
+	SET_ERROR_MESSAGE,
+} = userSlice.actions;
 
 export default userSlice.reducer;

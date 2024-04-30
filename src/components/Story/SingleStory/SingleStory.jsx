@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_VIEW_STORY_POPUP } from '../../../redux/slice/mainSlice';
+import { SET_MAIN_LOADING, SET_VIEW_STORY_POPUP } from '../../../redux/slice/mainSlice';
 import EditIcon from '../../../svg/EditIcon';
 import styles from './SingleStory.module.css';
 import { SET_ACTIVE_STORY } from '../../../redux/slice/storySlice';
@@ -16,12 +16,15 @@ const SingleStory = ({ story }) => {
 	const handleStory = async () => {
 		const storyId = story._id;
 		try {
+			dispatch(SET_MAIN_LOADING(true));
 			const data = await getStoryApi({ storyId });
 			dispatch(SET_VIEW_STORY_POPUP(true));
 			dispatch(SET_ACTIVE_STORY(data.data));
 		} catch (error) {
 			toast.error(error.message);
 			dispatch(SET_VIEW_STORY_POPUP(false));
+		} finally {
+			dispatch(SET_MAIN_LOADING(false));
 		}
 	};
 
@@ -50,12 +53,14 @@ const SingleStory = ({ story }) => {
 					</p>
 				</div>
 			</div>
-			<div className={styles.editButtonContainer}>
-				<div className={styles.editIcon}>
-					<EditIcon />
+			{story?.addedBy === user._id && (
+				<div className={styles.editButtonContainer}>
+					<div className={styles.editIcon}>
+						<EditIcon />
+					</div>
+					<span>edit</span>
 				</div>
-				<span>edit</span>
-			</div>
+			)}
 		</div>
 	);
 };

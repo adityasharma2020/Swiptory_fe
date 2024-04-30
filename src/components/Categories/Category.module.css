@@ -33,13 +33,16 @@
 	backdrop-filter: blur(10px);
 }
 
-.loading{
+.loading {
 	filter: blur(20px);
 }
 
 .mainContainer:active,
 .mainContainer:hover {
 	border: 5px solid var(--border-blue);
+}
+.active {
+	border: 6px solid var(--border-blue);
 }
 
 .mainContainer p {

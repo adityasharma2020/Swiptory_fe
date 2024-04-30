@@ -14,7 +14,7 @@ const initialSlide = {
 	ImageURL: '',
 };
 
-const AddStoryPopup = ({ categories, setNewStoryAdded }) => {
+const AddStoryPopup = ({ setNewStoryAdded }) => {
 	const dispatch = useDispatch();
 	const [closeButtonClicked, setCloseButtonClicked] = useState(false);
 	const [slides, setSlides] = useState([initialSlide, initialSlide, initialSlide]);
@@ -25,7 +25,7 @@ const AddStoryPopup = ({ categories, setNewStoryAdded }) => {
 	const { user } = useSelector((state) => state.user);
 	const { token } = user;
 
-	const { loading } = useSelector((state) => state.main);
+	const { loading ,categories} = useSelector((state) => state.main);
 
 	const handleCloseButton = () => {
 		setCloseButtonClicked(true);

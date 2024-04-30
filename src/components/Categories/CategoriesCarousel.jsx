@@ -1,7 +1,9 @@
 import Category from './Category';
 import styles from './CategoriesCarousel.module.css';
+import { useSelector } from 'react-redux';
 
-const CategoriesCarousel = ({categories, selectedCategory, setSelectedCategory }) => {
+const CategoriesCarousel = () => {
+	const { categories } = useSelector((state) => state.main);
 	return (
 		<div className={styles.mainContainer}>
 			<div className={styles.categoriesContainer}>
@@ -10,8 +12,6 @@ const CategoriesCarousel = ({categories, selectedCategory, setSelectedCategory }
 						<Category
 							key={index}
 							category={category}
-							selectedCategory={selectedCategory}
-							setSelectedCategory={setSelectedCategory}
 						/>
 					);
 				})}

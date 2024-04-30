@@ -1,31 +1,34 @@
 import { useEffect, useState } from 'react';
 import CategoriesCarousel from '../components/Categories/CategoriesCarousel';
 import CurrentUserStories from '../components/Story/CurrentUserStories/CurrentUserStories';
-import CategoryStories from '../components/Story/CategoryStories/CategoryStories';
-import { useDispatch, useSelector } from 'react-redux';
-import { SET_MAIN_LOADING } from '../redux/slice/mainSlice';
+import { useSelector } from 'react-redux';
+import AllCategoriesStories from '../components/Story/AllCategoriesStories/AllCategoriesStories';
 
-const HomePage = ({ categories, newStoryAdded }) => {
-	const [selectedCategory, setSelectedCategory] = useState('All');
+import CategoryStories from '../components/Story/CategoryStories/CategoryStories';
+
+const HomePage = ({ newStoryAdded, isSmallScreen }) => {
 	const { isLoggedIn } = useSelector((state) => state.user);
+	console.log('homepage hello');
+	const { selectedCategory } = useSelector((state) => state.main);
 
 	return (
 		<div>
 			<div>
-				<CategoriesCarousel
-					categories={categories}
-					setSelectedCategory={setSelectedCategory}
-					selectedCategory={selectedCategory}
-				/>
+				<CategoriesCarousel />
 			</div>
 
-			<div>{isLoggedIn ? <CurrentUserStories newStoryAdded={newStoryAdded} /> : null}</div>
+			<div>
+				{isLoggedIn && (selectedCategory.key ==='All') && !isSmallScreen ? (
+					<CurrentUserStories newStoryAdded={newStoryAdded} />
+				) : null}
+			</div>
 
 			<div>
-				<CategoryStories
-					selectedCategory={selectedCategory}
-					newStoryAdded={newStoryAdded}
-				/>
+				{selectedCategory.key === 'All' ? (
+					<AllCategoriesStories />
+				) : (
+					<CategoryStories category={selectedCategory} />
+				)}
 			</div>
 		</div>
 	);

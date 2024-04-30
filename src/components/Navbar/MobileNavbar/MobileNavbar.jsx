@@ -11,6 +11,7 @@ import {
 } from '../../../redux/slice/mainSlice';
 import { useNavigate } from 'react-router-dom';
 import { SET_LOGOUT } from '../../../redux/slice/userSlice';
+import toast from 'react-hot-toast';
 
 const MobileNavbar = () => {
 	const { isLoggedIn } = useSelector((state) => state.user);
@@ -46,6 +47,7 @@ const MobileNavbar = () => {
 
 	const handleLogout = () => {
 		dispatch(SET_LOGOUT());
+		toast.success('Logout successful.');
 		setShowUserMenu(false);
 	};
 

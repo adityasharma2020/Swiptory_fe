@@ -52,7 +52,7 @@ const RegisterPopup = () => {
 						...values,
 						picture: pictureData?.secure_url,
 					});
-					console.log('pictureData:', pictureData);
+
 				});
 			} else {
 				response = await registerUserApi({ ...values, picture: '' });

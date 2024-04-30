@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
 import Loader from './components/Loader/Loader';
 import Navbar from './components/Navbar/Navbar';
@@ -9,31 +9,54 @@ import ViewStoryPage from './pages/ViewStoryPage';
 import BookmarkPage from './pages/BookMarkPage';
 import LoginPopup from './components/Auth/Login/LoginPopup';
 import RegisterPopup from './components/Auth/Register/RegisterPopup';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import MobileNavbar from './components/Navbar/MobileNavbar/MobileNavbar';
 import ViewStoryPopup from './components/Story/ViewStoryPopup/ViewStoryPopup';
 import AddStoryPopup from './components/Story/AddStoryPopup/AddStoryPopup';
+import { jwtDecode } from 'jwt-decode';
 import './App.css';
-
-const categories = [
-	{ key: 'All', name: 'All', img: '/public/assets/categories/all.webp' },
-	{ key: 'Food', name: 'Food', img: '/public/assets/categories/food.webp' },
-	{ key: 'Health', name: 'Health And Fitness', img: '/public/assets/categories/health.webp' },
-	{ key: 'Travel', name: 'Travel', img: '/public/assets/categories/travel.webp' },
-	{ key: 'Movie', name: 'Movies', img: '/public/assets/categories/movies.webp' },
-	{ key: 'Education', name: 'Education', img: '/public/assets/categories/education.webp' },
-	{ key: 'Medical', name: 'Medical', img: '/public/assets/categories/medical.webp' },
-	{ key: 'World', name: 'World', img: '/public/assets/categories/world.webp' },
-	{ key: 'India', name: 'India', img: '/public/assets/categories/india.webp' },
-];
+import YourStoryPage from './pages/YourStoryPage.jsx';
+import { SET_SESSION } from './redux/slice/userSlice.js';
 
 function App() {
 	const [isSmallScreen, setIsSmallScreen] = useState(false);
 	const [newStoryAdded, setNewStoryAdded] = useState(false);
+	const { user } = useSelector((state) => state.user);
+	const { token } = user;
+	const dispatch = useDispatch();
 	const { showLoginPopup, loading, showRegisterPopup, showViewStoryPopup, showAddStoryPopup } =
 		useSelector((state) => state.main);
-	const { activeStory } = useSelector((state) => state.story);
 
+	const decodeToken = (token) => {
+		return jwtDecode(token);
+	};
+	const handleIsTokenExpired = useCallback((token) => {
+		const decodedToken = decodeToken(token);
+		const expirationTime = decodedToken.exp;
+		const currentTime = Math.floor(Date.now() / 1000);
+		return expirationTime < currentTime;
+	}, []);
+
+	//for token expiry every minute
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (token) {
+				const session = handleIsTokenExpired(token);
+				if (session) {
+					dispatch(SET_SESSION(session));
+					toast('Session Expired! Please log in again .', {
+						style: {
+							border: '1px solid #ff7373',
+							color: '#ff7373',
+						},
+					});
+				}
+			}
+		}, 50000); // To check token is valid or not every min.
+		return () => clearInterval(interval);
+	}, [token, dispatch, handleIsTokenExpired]);
+
+	//for screen size
 	useEffect(() => {
 		const handleResize = () => {
 			setIsSmallScreen(window.matchMedia('(max-width: 700px)').matches);
@@ -50,19 +73,37 @@ function App() {
 
 	return (
 		<>
-			<Toaster />
+			<Toaster
+				toastOptions={{
+					success: {
+						iconTheme: {
+							primary: '#73abff',
+							secondary: 'white',
+						},
+						style: {
+							color: '#73abff',
+						},
+					},
+					error: {
+						iconTheme: {
+							primary: '#ff7373',
+							secondary: 'white',
+						},
+						style: {
+							color: '#ff7373',
+						},
+					},
+				}}
+			/>
 			{loading ? <Loader /> : null}
 
 			<div>
 				<BrowserRouter>
 					{showLoginPopup ? <LoginPopup /> : null}
 					{showRegisterPopup ? <RegisterPopup /> : null}
-					{showViewStoryPopup ? <ViewStoryPopup activeStory={activeStory} /> : null}
+					{showViewStoryPopup ? <ViewStoryPopup isSmallScreen={isSmallScreen} /> : null}
 					{showAddStoryPopup ? (
-						<AddStoryPopup
-							categories={categories}
-							setNewStoryAdded={setNewStoryAdded}
-						/>
+						<AddStoryPopup setNewStoryAdded={setNewStoryAdded} />
 					) : null}
 
 					{isSmallScreen ? <MobileNavbar /> : <Navbar />}
@@ -70,13 +111,22 @@ function App() {
 						<Route path='/bookmarks' element={<BookmarkPage />} />
 						<Route
 							path='/your-story'
-							element={isSmallScreen ? <>your story </> : <Navigate to='/' replace />}
+							element={
+								isSmallScreen ? (
+									<YourStoryPage newStoryAdded={newStoryAdded} />
+								) : (
+									<Navigate to='/' replace />
+								)
+							}
 						/>
 						<Route path='/view_story/:id' element={<ViewStoryPage />} />
 						<Route
 							path='/*'
 							element={
-								<HomePage categories={categories} newStoryAdded={newStoryAdded} />
+								<HomePage
+									newStoryAdded={newStoryAdded}
+									isSmallScreen={isSmallScreen}
+								/>
 							}
 						/>
 					</Routes>

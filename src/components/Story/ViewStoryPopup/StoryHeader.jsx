@@ -10,7 +10,7 @@ const StoryHeader = ({
 	duration = 5000,
 	loaded,
 }) => {
-	const updateInterval = 100;
+	const updateInterval = 110;
 
 	useEffect(() => {
 		// Handle initial state or when there are no stories
