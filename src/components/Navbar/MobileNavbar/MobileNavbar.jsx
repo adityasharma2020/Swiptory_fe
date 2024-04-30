@@ -48,6 +48,7 @@ const MobileNavbar = () => {
 	const handleLogout = () => {
 		dispatch(SET_LOGOUT());
 		toast.success('Logout successful.');
+		navigate('/');
 		setShowUserMenu(false);
 	};
 
@@ -69,7 +70,13 @@ const MobileNavbar = () => {
 		<div className={`${styles.mainContainer} ${scrolled ? styles.scrolled : ''}`}>
 			{/* container */}
 			<div className={styles.container}>
-				<div onClick={() => navigate('/')} className={styles.logoContainer}>
+				<div
+					onClick={() => {
+						navigate('/');
+						setShowUserMenu(false);
+					}}
+					className={styles.logoContainer}
+				>
 					<div className={styles.imageContainer}>
 						<img src={logo} alt='' />
 					</div>

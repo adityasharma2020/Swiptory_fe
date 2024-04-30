@@ -40,3 +40,21 @@ export const getUserStoriesApi = async ({ token ,page}) => {
 		throw new Error(error.response?.data?.error?.message || 'something went wrong');
 	}
 };
+
+// fetchBookmarkStoriesApi
+export const fetchBookmarkStoriesApi = async ({ token ,page}) => {
+	try {
+		const response = await axios.get(
+			`${USER_ENDPOINT}/stories/bookmarks?page=${page}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		return response.data;
+	} catch (error) {
+		throw new Error(error.response?.data?.error?.message || 'something went wrong');
+	}
+};

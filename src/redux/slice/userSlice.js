@@ -12,6 +12,7 @@ export const userSlice = createSlice({
 			email: '',
 			picture: '',
 			token: '',
+			bookmarks: [],
 		},
 	},
 	reducers: {
@@ -25,6 +26,7 @@ export const userSlice = createSlice({
 					email: '',
 					picture: '',
 					token: '',
+					bookmarks: [],
 				});
 		},
 		SET_LOGIN: (state, action) => {
@@ -36,6 +38,7 @@ export const userSlice = createSlice({
 			state.user.email = userDetails?.user?.email;
 			state.user.picture = userDetails?.user?.picture;
 			state.user.token = userDetails?.user?.token;
+			state.user.bookmarks = userDetails?.user?.bookmarks;
 			state.error = '';
 		},
 		SET_REGISTER: (state, action) => {
@@ -46,6 +49,7 @@ export const userSlice = createSlice({
 			state.user.email = userDetails?.user?.email;
 			state.user.picture = userDetails?.user?.picture;
 			state.user.token = userDetails?.user?.token;
+			state.user.bookmarks = userDetails?.user?.bookmarks;
 			state.error = '';
 		},
 		SET_ERROR_MESSAGE: (state, action) => {
@@ -66,6 +70,7 @@ export const userSlice = createSlice({
 						email: '',
 						picture: '',
 						token: '',
+						bookmarks: [],
 					});
 			}
 		},

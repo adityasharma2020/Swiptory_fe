@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import SkeletonLoader from '../../SkeletonLoader/SkeletonLoader';
 
-
 const CategoryStories = ({ category }) => {
 	const [page, setPage] = useState(1);
 	const [stories, setStories] = useState([]);
@@ -14,15 +13,14 @@ const CategoryStories = ({ category }) => {
 	const [remainingCount, setRemainingConut] = useState(null);
 	const { token } = user;
 	const [storiesLoading, setStoriesLoading] = useState(false);
-	const [showMoreClicked,setShowMoreClicked] = useState(false);
+	const [showMoreClicked, setShowMoreClicked] = useState(false);
 
-	console.log('category stories:', stories);
 
 	useEffect(() => {
 		const fetchStories = async () => {
 			const categoryKey = category.key;
 			try {
-				if(!showMoreClicked){
+				if (!showMoreClicked) {
 					setStoriesLoading(true);
 				}
 
@@ -39,13 +37,12 @@ const CategoryStories = ({ category }) => {
 
 		fetchStories();
 	}, [category.key, page, showMoreClicked, token]);
-	
 
 	useEffect(() => {
 		setShowMoreClicked(false);
 		setStories([]);
 		setPage(1);
-	}, [category.key]);
+	}, [category.key, user, token]);
 
 	return (
 		<div className={styles.mainContainer}>

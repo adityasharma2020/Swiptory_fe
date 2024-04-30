@@ -12,7 +12,6 @@ const loadStateFromLocalStorage = () => {
 		}
 		return JSON.parse(data);
 	} catch (error) {
-		console.error('Error loading state from local storage:', error);
 		return undefined;
 	}
 };
@@ -23,7 +22,7 @@ const saveStateIntoLocalStorage = (state) => {
 		const data = JSON.stringify(updatedState);
 		localStorage.setItem('userState', data);
 	} catch (error) {
-		console.error('Error saving state to local storage:', error);
+		return undefined;
 	}
 };
 

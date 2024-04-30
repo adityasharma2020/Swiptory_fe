@@ -8,7 +8,6 @@ import CategoryStories from '../components/Story/CategoryStories/CategoryStories
 
 const HomePage = ({ newStoryAdded, isSmallScreen }) => {
 	const { isLoggedIn } = useSelector((state) => state.user);
-	console.log('homepage hello');
 	const { selectedCategory } = useSelector((state) => state.main);
 
 	return (

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getUserStoriesApi } from '../../../services/userService';
 import toast from 'react-hot-toast';
 import SkeletonLoader from '../../SkeletonLoader/SkeletonLoader';
+import { useLocation } from 'react-router-dom';
 
 const CurrentUserStories = ({ newStoryAdded }) => {
 	const [userStories, setUserStories] = useState([]);
@@ -12,6 +13,7 @@ const CurrentUserStories = ({ newStoryAdded }) => {
 	const [remainingCount, setRemainingConut] = useState(null);
 	const [storiesLoading, setStoriesLoading] = useState(false);
 	const [showMoreClicked, setShowMoreClicked] = useState(false);
+	const location = useLocation();
 	const { user } = useSelector((state) => state.user);
 	const { token } = user;
 
@@ -35,31 +37,45 @@ const CurrentUserStories = ({ newStoryAdded }) => {
 	}, [token, newStoryAdded, page, showMoreClicked]);
 
 	return (
-		<div className={styles.mainContainer}>
-			<h1 className={styles.h1}>Your Stories</h1>
-			{!storiesLoading ? (
+		<>
+			{location.pathname.startsWith('/your-story') || userStories.length > 0 ? (
 				<>
-					<div className={styles.container}>
-						{userStories?.map((story, index) => {
-							return <SingleStory key={index} story={story} />;
-						})}
+					<div className={styles.mainContainer}>
+						<h1 className={styles.h1}>Your Stories</h1>
+						{!storiesLoading ? (
+							<>
+								{userStories.length > 0 ? (
+									<>
+										<div className={styles.container}>
+											{userStories?.map((story, index) => {
+												return <SingleStory key={index} story={story} />;
+											})}
+										</div>
+										{remainingCount > 0 && (
+											<button
+												onClick={() => {
+													setShowMoreClicked(true);
+													setPage((prev) => prev + 1);
+												}}
+												className={styles.showMoreButton}
+											>
+												Show More
+											</button>
+										)}
+									</>
+								) : (
+									<>
+										<div className={styles.noStories}>No Stories Available</div>
+									</>
+								)}
+							</>
+						) : (
+							<SkeletonLoader />
+						)}
 					</div>
-					{remainingCount > 0 && (
-						<button
-							onClick={() => {
-								setShowMoreClicked(true);
-								setPage((prev) => prev + 1);
-							}}
-							className={styles.showMoreButton}
-						>
-							Show More
-						</button>
-					)}
 				</>
-			) : (
-				<SkeletonLoader />
-			)}
-		</div>
+			) : null}
+		</>
 	);
 };
 

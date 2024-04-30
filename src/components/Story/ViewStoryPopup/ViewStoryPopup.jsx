@@ -56,7 +56,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 			dispatch(SET_VIEW_STORY_POPUP(false));
 			dispatch(SET_ACTIVE_STORY({}));
 		}
-	},[dispatch, location.pathname, navigate]);
+	}, [dispatch, location.pathname, navigate]);
 
 	const handleShareButton = async () => {
 		const textToCopy = `${API_ENDPOINT}/view_story/${activeStory._id}`;
@@ -204,7 +204,6 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 						</div>
 
 						<div className={styles.likeLottieContainer}></div>
-						<span>1000</span>
 						<div className={styles.likeContainer}>
 							<div
 								onClick={handleLikeClicked}
@@ -212,6 +211,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 							>
 								<LikeIcon />
 							</div>
+							<span>{activeStory.likeCount}</span>
 						</div>
 					</div>
 				</div>
