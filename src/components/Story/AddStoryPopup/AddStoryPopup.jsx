@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import CloseIcon from '../../../svg/CloseIcon.jsx';
 import { SET_ADD_STORY_POPUP, SET_MAIN_LOADING } from '../../../redux/slice/mainSlice.js';
-import { useRef, useState } from 'react';
-import { addStoryApi } from '../../../services/userService.js';
+import { useEffect, useRef, useState } from 'react';
+import { addStoryApi, updateStoryApi } from '../../../services/userService.js';
 import toast from 'react-hot-toast';
+import { SET_EDITING_STORY, SET_EDIT_MODE } from '../../../redux/slice/storySlice.js';
 
 const initialSlide = {
 	Heading: '',
@@ -23,11 +24,16 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 	const [error, setError] = useState('');
 	const formRef = useRef(null);
 	const { user } = useSelector((state) => state.user);
+	const { editMode, editingStory } = useSelector((state) => state.story);
 	const { token } = user;
 
-	const { loading ,categories} = useSelector((state) => state.main);
+	const { loading, categories } = useSelector((state) => state.main);
 
 	const handleCloseButton = () => {
+		if (editMode) {
+			dispatch(SET_EDIT_MODE(false));
+			dispatch(SET_EDITING_STORY({}));
+		}
 		setCloseButtonClicked(true);
 		setTimeout(() => {
 			dispatch(SET_ADD_STORY_POPUP(false));
@@ -101,8 +107,14 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 
 		try {
 			const values = { slides, category: category };
-			const response = await addStoryApi({ values, token });
-			toast.success('Story created successfully.');
+			if (editMode) {
+				const storyId = editingStory._id;
+				const response = await updateStoryApi({ storyId,values, token });
+				toast.success('Story updated successfully.');
+			} else {
+				const response = await addStoryApi({ values, token });
+				toast.success('Story created successfully.');
+			}
 			handleCloseButton();
 			setNewStoryAdded(true);
 		} catch (error) {
@@ -112,6 +124,19 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 		}
 	};
 
+	useEffect(() => {
+		if (editMode && editingStory) {
+			setCategory(editingStory.category);
+
+			const slidesData = editingStory.slides.map((slide) => ({
+				Heading: slide.Heading,
+				Description: slide.Description,
+				ImageURL: slide.ImageURL,
+			}));
+			setSlides(slidesData);
+		}
+	}, [editMode, editingStory]);
+	console.log('slides:', editingStory.slides);
 	return (
 		<div
 			className={`${styles.mainContainer} entryAnimation ${
@@ -205,6 +230,7 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 								onChange={handleCategoryChange}
 								className={styles.select}
 								id='Category'
+								value={category}
 							>
 								{categories.slice(1).map((category, index) => (
 									<option
@@ -245,7 +271,7 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 						className={`${styles.button} ${styles.post}`}
 						type='button'
 					>
-						{loading === true ? <Loader /> : 'Post'}
+						{loading === true ? <Loader /> : editMode ? 'Update' : 'Post'}
 					</button>
 				</div>
 			</div>

@@ -36,6 +36,12 @@ const CurrentUserStories = ({ newStoryAdded }) => {
 		getStories();
 	}, [token, newStoryAdded, page, showMoreClicked]);
 
+	useEffect(() => {
+		setShowMoreClicked(false);
+		setUserStories([]);
+		setPage(1);
+	}, [newStoryAdded, user, token]);
+
 	return (
 		<>
 			{location.pathname.startsWith('/your-story') || userStories.length > 0 ? (

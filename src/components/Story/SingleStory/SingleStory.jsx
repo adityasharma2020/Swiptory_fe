@@ -1,8 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_MAIN_LOADING, SET_VIEW_STORY_POPUP } from '../../../redux/slice/mainSlice';
+import {
+	SET_ADD_STORY_POPUP,
+	SET_MAIN_LOADING,
+	SET_VIEW_STORY_POPUP,
+} from '../../../redux/slice/mainSlice';
 import EditIcon from '../../../svg/EditIcon';
 import styles from './SingleStory.module.css';
-import { SET_ACTIVE_STORY } from '../../../redux/slice/storySlice';
+import {
+	SET_ACTIVE_STORY,
+	SET_EDITING_STORY,
+	SET_EDIT_MODE,
+} from '../../../redux/slice/storySlice';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { getStoryApi } from '../../../services/StoriesService';
@@ -28,9 +36,19 @@ const SingleStory = ({ story }) => {
 		}
 	};
 
+	const handleEditButton = () => {
+		try {
+			dispatch(SET_EDIT_MODE(true));
+			dispatch(SET_EDITING_STORY(story));
+			dispatch(SET_ADD_STORY_POPUP(true));
+		} catch (error) {
+			toast.error(error.message);
+		}
+	};
+
 	return (
-		<div onClick={handleStory} className={styles.outerContainer}>
-			<div className={styles.mainContainer}>
+		<div className={styles.outerContainer}>
+			<div onClick={handleStory} className={styles.mainContainer}>
 				<div className={styles.imageContainer}>
 					<img
 						className={!loaded ? `${styles.loading}` : ''}
@@ -54,7 +72,7 @@ const SingleStory = ({ story }) => {
 				</div>
 			</div>
 			{story?.addedBy === user._id && (
-				<div className={styles.editButtonContainer}>
+				<div onClick={handleEditButton} className={styles.editButtonContainer}>
 					<div className={styles.editIcon}>
 						<EditIcon />
 					</div>
