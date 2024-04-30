@@ -1,22 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 const AllCategories = [
-	{ key: 'All', name: 'All', img: '/public/assets/categories/all.webp' },
-	{ key: 'Food', name: 'Food', img: '/public/assets/categories/food.webp' },
+	{ key: 'All', name: 'All', img: '/assets/categories/all.webp' },
+	{ key: 'Food', name: 'Food', img: '/assets/categories/food.webp' },
 	{
 		key: 'Health',
 		name: 'Health And Fitness',
-		img: '/public/assets/categories/health.webp',
+		img: '/assets/categories/health.webp',
 	},
-	{ key: 'Travel', name: 'Travel', img: '/public/assets/categories/travel.webp' },
-	{ key: 'Movie', name: 'Movies', img: '/public/assets/categories/movies.webp' },
+	{ key: 'Travel', name: 'Travel', img: '/assets/categories/travel.webp' },
+	{ key: 'Movie', name: 'Movies', img: '/assets/categories/movies.webp' },
 	{
 		key: 'Education',
 		name: 'Education',
-		img: '/public/assets/categories/education.webp',
+		img: '/assets/categories/education.webp',
 	},
-	{ key: 'Medical', name: 'Medical', img: '/public/assets/categories/medical.webp' },
-	{ key: 'World', name: 'World', img: '/public/assets/categories/world.webp' },
-	{ key: 'India', name: 'India', img: '/public/assets/categories/india.webp' },
+	{ key: 'Medical', name: 'Medical', img: '/assets/categories/medical.webp' },
+	{ key: 'World', name: 'World', img: '/assets/categories/world.webp' },
+	{ key: 'India', name: 'India', img: '/assets/categories/india.webp' },
 ];
 
 export const mainSlice = createSlice({

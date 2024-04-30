@@ -15,7 +15,6 @@ const CategoryStories = ({ category }) => {
 	const [storiesLoading, setStoriesLoading] = useState(false);
 	const [showMoreClicked, setShowMoreClicked] = useState(false);
 
-
 	useEffect(() => {
 		const fetchStories = async () => {
 			const categoryKey = category.key;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './MobileNavbar.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import logo from '/public/assets/SwiptoryLogo.webp';
+import logo from '/assets/SwiptoryLogo.webp';
 import MenuIcon from '../../../svg/MenuIcon';
 import BookMarkIcon from '../../../svg/BookMarkIcon';
 import {
