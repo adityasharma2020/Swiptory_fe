@@ -68,4 +68,9 @@
 	.errorMessage {
 		font-size: 0.7rem;
 	}
+	.mainContainer{
+		flex-direction: column;
+		align-items: start;
+		gap: 0.7rem;
+	}
 }

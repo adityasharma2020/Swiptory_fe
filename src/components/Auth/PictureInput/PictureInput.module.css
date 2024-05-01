@@ -83,4 +83,14 @@
 	.errorMessage {
 		font-size: 0.7rem;
 	}
+	.label{
+		font-size: 0.8rem;
+	}
+	.mainContainer{
+		justify-content: space-between;
+		width: 100%;
+	}
+	.button{
+		font-size: 0.6rem;
+	}
 }

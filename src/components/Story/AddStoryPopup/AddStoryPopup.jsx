@@ -17,9 +17,10 @@ const initialSlide = {
 
 const AddStoryPopup = ({ setNewStoryAdded }) => {
 	const dispatch = useDispatch();
+	const { loading, categories } = useSelector((state) => state.main);
 	const [closeButtonClicked, setCloseButtonClicked] = useState(false);
 	const [slides, setSlides] = useState([initialSlide, initialSlide, initialSlide]);
-	const [category, setCategory] = useState(null); // default as the 1st index category from our category list.
+	const [category, setCategory] = useState(categories[1]?.key); // default as the 1st index category from our category list.
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [error, setError] = useState('');
 	const formRef = useRef(null);
@@ -27,7 +28,6 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 	const { editMode, editingStory } = useSelector((state) => state.story);
 	const { token } = user;
 
-	const { loading, categories } = useSelector((state) => state.main);
 
 	const handleCloseButton = () => {
 		if (editMode) {
@@ -136,7 +136,7 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 			setSlides(slidesData);
 		}
 	}, [editMode, editingStory]);
-	console.log('slides:', editingStory.slides);
+
 	return (
 		<div
 			className={`${styles.mainContainer} entryAnimation ${
@@ -231,12 +231,14 @@ const AddStoryPopup = ({ setNewStoryAdded }) => {
 								className={styles.select}
 								id='Category'
 								value={category}
+							
 							>
 								{categories.slice(1).map((category, index) => (
 									<option
 										className={styles.option}
 										key={index}
 										value={category.key}
+										
 									>
 										{category.name}
 									</option>

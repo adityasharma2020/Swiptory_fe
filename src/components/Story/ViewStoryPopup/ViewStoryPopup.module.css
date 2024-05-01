@@ -109,6 +109,7 @@
 	height: 2rem;
 	display: flex;
 	fill: white;
+	color: white;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;

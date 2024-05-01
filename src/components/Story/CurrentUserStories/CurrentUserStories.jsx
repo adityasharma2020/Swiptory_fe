@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import SingleStory from '../SingleStory/SingleStory';
 import styles from './CurrentUserStories.module.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserStoriesApi } from '../../../services/userService';
 import toast from 'react-hot-toast';
 import SkeletonLoader from '../../SkeletonLoader/SkeletonLoader';
 import { useLocation } from 'react-router-dom';
+import { SET_MAIN_LOADING } from '../../../redux/slice/mainSlice';
 
 const CurrentUserStories = ({ newStoryAdded }) => {
 	const [userStories, setUserStories] = useState([]);
@@ -14,14 +15,18 @@ const CurrentUserStories = ({ newStoryAdded }) => {
 	const [storiesLoading, setStoriesLoading] = useState(false);
 	const [showMoreClicked, setShowMoreClicked] = useState(false);
 	const location = useLocation();
+	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.user);
 	const { token } = user;
 
 	useEffect(() => {
 		const getStories = async () => {
 			try {
+				
 				if (!showMoreClicked) {
 					setStoriesLoading(true);
+				}else{
+					dispatch(SET_MAIN_LOADING(true));
 				}
 				const data = await getUserStoriesApi({ token, page });
 				const newStories = data.data?.data;
@@ -31,6 +36,7 @@ const CurrentUserStories = ({ newStoryAdded }) => {
 				toast.error(error.message);
 			} finally {
 				setStoriesLoading(false);
+				dispatch(SET_MAIN_LOADING(false));
 			}
 		};
 		getStories();

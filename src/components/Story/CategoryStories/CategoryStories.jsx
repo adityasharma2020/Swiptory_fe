@@ -2,15 +2,17 @@ import { useCallback, useEffect, useState } from 'react';
 import SingleStory from '../SingleStory/SingleStory';
 import styles from './CategoryStories.module.css';
 import { fetchCategoryStoriesApi } from '../../../services/StoriesService';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import SkeletonLoader from '../../SkeletonLoader/SkeletonLoader';
+import { SET_MAIN_LOADING } from '../../../redux/slice/mainSlice';
 
 const CategoryStories = ({ category }) => {
 	const [page, setPage] = useState(1);
 	const [stories, setStories] = useState([]);
 	const { user } = useSelector((state) => state.user);
 	const [remainingCount, setRemainingConut] = useState(null);
+	const dispatch = useDispatch();
 	const { token } = user;
 	const [storiesLoading, setStoriesLoading] = useState(false);
 	const [showMoreClicked, setShowMoreClicked] = useState(false);
@@ -21,6 +23,8 @@ const CategoryStories = ({ category }) => {
 			try {
 				if (!showMoreClicked) {
 					setStoriesLoading(true);
+				} else {
+					dispatch(SET_MAIN_LOADING(true));
 				}
 
 				const data = await fetchCategoryStoriesApi({ categoryKey, token, page });
@@ -31,6 +35,7 @@ const CategoryStories = ({ category }) => {
 				toast.error(error.message);
 			} finally {
 				setStoriesLoading(false);
+				dispatch(SET_MAIN_LOADING(false));
 			}
 		};
 

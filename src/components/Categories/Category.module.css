@@ -19,12 +19,6 @@
 	z-index: 1;
 }
 
-@media screen and (max-width: 700px) {
-	.mainContainer {
-		width: 8rem;
-		height: 8rem;
-	}
-}
 
 .mainContainer img {
 	width: 100%;
@@ -55,4 +49,14 @@
 	text-transform: capitalize;
 	font-weight: bold;
 	z-index: 2;
+}
+
+@media screen and (max-width: 700px) {
+	.mainContainer {
+		width: 8rem;
+		height: 8rem;
+	}
+	.mainContainer p {
+		font-size: 1rem;
+	}
 }

@@ -22,6 +22,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 	const { activeStory } = useSelector((state) => state.story);
 	const { user } = useSelector((state) => state.user);
 	const location = useLocation();
+	const [noOfLike, setNoOfLike] = useState(activeStory?.likeCount || 0);
 	const [progress, setProgress] = useState(0);
 	const { token } = user;
 
@@ -73,8 +74,15 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 		} else {
 			const storyId = activeStory._id;
 			try {
+				setIsLiked((prev) => !prev);
+				setNoOfLike((prev) => {
+					if (isLiked === false) {
+						return prev + 1;
+					} else if (isLiked === true) {
+						return prev - 1;
+					}
+				});
 				await likeStoryApi({ storyId, token });
-				setIsLiked(true);
 			} catch (error) {
 				toast.error(error.message);
 			}
@@ -90,8 +98,8 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 		} else {
 			const storyId = activeStory._id;
 			try {
+				setIsBookMarked((prev) => !prev);
 				await bookMarkStoryApi({ storyId, token });
-				setIsBookMarked(true);
 			} catch (error) {
 				toast.error(error.message);
 			}
@@ -100,19 +108,28 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
-			if (event.keyCode == 37) {
+			if (event.keyCode === 37) {
 				// for left Arrow
 				handleBack();
-			} else if (event.keyCode == 39) {
-				//for right arrow
+			} else if (event.keyCode === 39) {
+				// for right arrow
 				handleForward();
-			} else if (event.keyCode == 27) {
+			} else if (event.keyCode === 27) {
 				// for escape key
 				handleCloseButton();
 			}
 		};
+
+		const handlePopState = (event) => {
+			event.preventDefault();
+			handleCloseButton();
+		};
+
+		window.addEventListener('popstate', handlePopState);
 		document.addEventListener('keydown', handleKeyDown);
+
 		return () => {
+			window.removeEventListener('popstate', handlePopState);
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, [handleBack, handleCloseButton, handleForward]);
@@ -211,7 +228,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 							>
 								<LikeIcon />
 							</div>
-							<span>{activeStory.likeCount}</span>
+							<span>{noOfLike}</span>
 						</div>
 					</div>
 				</div>

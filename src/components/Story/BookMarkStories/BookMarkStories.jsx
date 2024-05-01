@@ -9,6 +9,7 @@ const BookMarkStories = () => {
 	const [bookmarkStories, setBookmarkStories] = useState([]);
 	const [storiesLoading, setStoriesLoading] = useState(false);
 	const { user } = useSelector((state) => state.user);
+	const { activeStory } = useSelector((state) => state.story);
 	const dispatch = useDispatch();
 	const [remainingCount, setRemainingConut] = useState(null);
 	const { token } = user;
@@ -30,6 +31,10 @@ const BookMarkStories = () => {
 		fetchBookmarkStories();
 	}, [dispatch, page, token]);
 
+	//to check whether bookmarks is removed or not , so that we show hte latest bookmarks
+	useEffect(() => {
+		setBookmarkStories([]);
+	}, [activeStory]);
 
 	return (
 		<>

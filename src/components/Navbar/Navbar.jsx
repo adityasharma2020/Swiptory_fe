@@ -7,6 +7,7 @@ import BookMarkIcon from '../../svg/BookMarkIcon';
 import {
 	SET_ADD_STORY_POPUP,
 	SET_LOGIN_POPUP,
+	SET_MAIN_LOADING,
 	SET_REGISTER_POPUP,
 } from '../../redux/slice/mainSlice';
 import { useNavigate } from 'react-router-dom';
@@ -33,9 +34,11 @@ const Navbar = () => {
 	};
 
 	const handleLogout = () => {
+		dispatch(SET_MAIN_LOADING(true));
 		dispatch(SET_LOGOUT());
 		toast.success('Logout successful.');
 		setShowUserMenu(false);
+		dispatch(SET_MAIN_LOADING(false));
 	};
 
 	useEffect(() => {

@@ -114,7 +114,7 @@ const RegisterPopup = () => {
 					<AuthInput
 						name='name'
 						type='text'
-						placeholder='Full Name'
+						placeholder='UserName'
 						register={register}
 						error={errors?.name?.message}
 					/>

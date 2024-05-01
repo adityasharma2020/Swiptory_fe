@@ -17,10 +17,10 @@
 }
 
 .entryAnimation {
-	animation: entry 1s forwards;
+	animation: entry 0.2s forwards;
 }
 .exitAnimation {
-	animation: exit 1s forwards;
+	animation: exit 0.2s forwards;
 }
 
 @keyframes entry {

@@ -17,6 +17,7 @@ import { jwtDecode } from 'jwt-decode';
 import './App.css';
 import YourStoryPage from './pages/YourStoryPage.jsx';
 import { SET_SESSION } from './redux/slice/userSlice.js';
+import Footer from './components/Footer/Footer.jsx';
 
 function App() {
 	const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -108,7 +109,7 @@ function App() {
 
 					{isSmallScreen ? <MobileNavbar /> : <Navbar />}
 					<Routes>
-						<Route path='/bookmarks' element={<BookmarkPage />} />
+						<Route path='/bookmarks' element={<BookmarkPage  />} />
 						<Route
 							path='/your-story'
 							element={
@@ -130,6 +131,9 @@ function App() {
 							}
 						/>
 					</Routes>
+					{
+						<Footer/>
+					}
 				</BrowserRouter>
 			</div>
 		</>
