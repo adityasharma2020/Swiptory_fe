@@ -132,7 +132,12 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 		};
 
 		const storyContainer = document.getElementById('storyContainerId');
-		if (storyContainer && isSmallScreen) {
+		if (
+			storyContainer &&
+			isSmallScreen &&
+			storyContainer.requestFullscreen &&
+			document.fullscreenElement
+		) {
 			storyContainer.requestFullscreen();
 		}
 
