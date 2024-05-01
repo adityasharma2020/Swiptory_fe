@@ -4,7 +4,6 @@ export default function CloseIcon({ className }) {
 	return (
 		<svg
 			viewBox='0 0 24 24'
-			
 			preserveAspectRatio='xMidYMid meet'
 			className={className}
 			enableBackground='new 0 0 24 24'

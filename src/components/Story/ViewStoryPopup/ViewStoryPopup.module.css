@@ -138,6 +138,21 @@
 	transform: scale(1.15);
 }
 
+.closedIcon{
+	.CloseIcon {
+		position: absolute;
+		width: 2rem;
+		height: 2rem;
+		top: 1rem;
+		right: 1rem;
+		padding: 0.3rem;
+		fill: white;
+		cursor: pointer;
+	
+	}
+	
+}
+
 /* ------------------image container---------- */
 .imageContainer {
 	position: relative;

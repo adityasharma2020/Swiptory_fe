@@ -176,7 +176,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 					{/* heder buttons */}
 					<div className={styles.headerButtonContainer}>
 						<div onClick={handleCloseButton} className={styles.closeIcon}>
-							<CloseIcon />
+							<CloseIcon className={styles.closedIcon} />
 						</div>
 						<div onClick={handleShareButton} className={styles.shareIcon}>
 							<ShareIcon />
