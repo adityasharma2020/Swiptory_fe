@@ -125,6 +125,11 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 			handleCloseButton();
 		};
 
+		const storyContainer = document.getElementById('storyContainerId');
+		if (storyContainer) {
+			storyContainer.requestFullscreen();
+		}
+
 		window.addEventListener('popstate', handlePopState);
 		document.addEventListener('keydown', handleKeyDown);
 
@@ -135,7 +140,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 	}, [handleBack, handleCloseButton, handleForward]);
 
 	return (
-		<div className={`${styles.mainContainer}`}>
+		<div id="storyContainerId" className={`${styles.mainContainer}`}>
 			<div className={styles.outerContainer}>
 				{/* Back Arrow */}
 				<div className={styles.backArrowIcon} onClick={handleBack}>
