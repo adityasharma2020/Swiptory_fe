@@ -186,6 +186,7 @@
 	flex-direction: column;
 	gap: 0.3rem;
 	text-align: start;
+	z-index: 9999;
 	padding: 1rem;
 	background: linear-gradient(
 		to bottom,
@@ -204,12 +205,13 @@
 /* ---------------------action buttons------------------- */
 .actionButtons {
 	position: absolute;
-	bottom: 0;
+	bottom: 0rem;
 	display: flex;
 	padding: 0.5rem 1rem;
 	width: 100%;
 	background-color: black;
 	justify-content: space-between;
+	z-index: 9999;
 	align-items: center;
 }
 
@@ -304,6 +306,13 @@
 	.forwardArrowIcon {
 		visibility: hidden;
 		width: 0;
+	}
+	.actionButtons{
+		bottom: 3rem;
+	}
+	.storyInfo{
+		bottom: 7rem;
+		padding: 1rem;
 	}
 }
 
