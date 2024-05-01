@@ -13,6 +13,7 @@ import { SET_ACTIVE_STORY } from '../../../redux/slice/storySlice';
 import toast from 'react-hot-toast';
 import { bookMarkStoryApi, likeStoryApi } from '../../../services/StoriesService';
 import { useLocation, useNavigate } from 'react-router-dom';
+import StoryClose from '../../../svg/StoryClose';
 const API_ENDPOINT = `${import.meta.env.VITE_REACT_APP_CLIENT_ENDPOINT}`;
 
 const ViewStoryPopup = ({ isSmallScreen }) => {
@@ -176,7 +177,7 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 					{/* heder buttons */}
 					<div className={styles.headerButtonContainer}>
 						<div onClick={handleCloseButton} className={styles.closeIcon}>
-							<CloseIcon className={styles.closedIcon} />
+							<StoryClose className={styles.closedIcon} />
 						</div>
 						<div onClick={handleShareButton} className={styles.shareIcon}>
 							<ShareIcon />
