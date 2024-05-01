@@ -125,22 +125,30 @@ const ViewStoryPopup = ({ isSmallScreen }) => {
 			handleCloseButton();
 		};
 
+		const handleFullscreenChange = () => {
+			if (!document.fullscreenElement && isSmallScreen) {
+				handleCloseButton();
+			}
+		};
+
 		const storyContainer = document.getElementById('storyContainerId');
-		if (storyContainer) {
+		if (storyContainer && isSmallScreen) {
 			storyContainer.requestFullscreen();
 		}
 
 		window.addEventListener('popstate', handlePopState);
 		document.addEventListener('keydown', handleKeyDown);
+		document.addEventListener('fullscreenchange', handleFullscreenChange);
 
 		return () => {
 			window.removeEventListener('popstate', handlePopState);
 			document.removeEventListener('keydown', handleKeyDown);
+			document.removeEventListener('fullscreenchange', handleFullscreenChange);
 		};
-	}, [handleBack, handleCloseButton, handleForward]);
+	}, [handleBack, handleCloseButton, handleForward, isSmallScreen]);
 
 	return (
-		<div id="storyContainerId" className={`${styles.mainContainer}`}>
+		<div id='storyContainerId' className={`${styles.mainContainer}`}>
 			<div className={styles.outerContainer}>
 				{/* Back Arrow */}
 				<div className={styles.backArrowIcon} onClick={handleBack}>
